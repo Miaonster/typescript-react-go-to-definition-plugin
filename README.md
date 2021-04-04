@@ -7,11 +7,11 @@ Typescript React Go To Definition Plugin
 
 ## Before
 
-![before](./document/before.jpg)
+![before](https://raw.githubusercontent.com/Miaonster/typescript-react-go-to-definition-plugin/master/document/before.jpg)
 
 ## After
 
-![before](./document/after.png)
+![before](https://raw.githubusercontent.com/Miaonster/typescript-react-go-to-definition-plugin/master/document/after.png)
 
 ## Usage
 
