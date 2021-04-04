@@ -15,11 +15,12 @@ export class ReactGoToDefinitionPlugin {
 
         proxy.getDefinitionAndBoundSpan = (filename: string, position: number) => {
           const prior = info.languageService.getDefinitionAndBoundSpan(filename, position);
+          // info.project.projectService.logger.info('xxx: ' + JSON.stringify(prior))
           if (prior && prior.definitions && prior.definitions.length > 1) {
             const definitions = prior?.definitions?.filter(x => !x.fileName.includes('@types/react/index.d.ts'))
             return { ...prior, definitions }
           }
-          return undefined
+          return prior
         }
 
         return proxy;
