@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+      "module": "commonjs",
+      "target": "es2016",
+      "outDir": "lib",
+      "rootDir": "src",
+      "strict": true,
+      "declaration": true
+  },
+  "exclude": [
+      "lib",
+      "e2e",
+      "node_modules",
+      "test-workspace"
+  ]
+}
