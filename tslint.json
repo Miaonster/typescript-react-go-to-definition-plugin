@@ -40,7 +40,7 @@
       "eofline": false,
       "semicolon": [
           true,
-          "always"
+          "never"
       ],
       "class-name": true,
       "prefer-const": true,
