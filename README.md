@@ -38,11 +38,14 @@ npm i typescript-react-go-to-definition-plugin
 ### Options
 
 * `remove`
+  * Default: `["**/node_modules/@types/react/index.d.ts"]`
+  * Type: Array of glob pattern, see [minimatch](https://github.com/isaacs/minimatch) for more details
+  * Description: If mulitple definitions exist and one of the definitions matches the glob pattern, remove that definiton.
 
-  Default `["**/node_modules/@types/react/index.d.ts"]`
-
-  Array of glob pattern, see [minimatch](https://github.com/isaacs/minimatch) for more details.
-
+* `forceRemove`
+  * Default: `[]`
+  * Type: Array of glob pattern, see [minimatch](https://github.com/isaacs/minimatch) for more details
+  * Description: If one of the definitions matches the glob pattern, remove that definiton.
 
 ## Purpose
 
