@@ -1,4 +1,9 @@
+export type Rule = string | {
+  file: string,
+  definition: string,
+}
+
 export interface SynchronizedConfiguration {
-  remove?: string[]
-  forceRemove?: string[]
+  remove?: Rule[]
+  forceRemove?: Rule[]
 }

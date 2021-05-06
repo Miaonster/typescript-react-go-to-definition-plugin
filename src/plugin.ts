@@ -2,7 +2,7 @@ import * as ts from 'typescript/lib/tsserverlibrary'
 import * as minimatch from 'minimatch'
 import { ConfigManager } from './config'
 import { LanguageServiceLogger } from './logger'
-import { SynchronizedConfiguration } from './types'
+import { SynchronizedConfiguration, Rule } from './types'
 
 export class ReactGoToDefinitionPlugin {
   public constructor(private readonly typescript: typeof ts) { }
@@ -25,21 +25,31 @@ export class ReactGoToDefinitionPlugin {
 
     proxy.getDefinitionAndBoundSpan = (filename: string, position: number) => {
       const prior = info.languageService.getDefinitionAndBoundSpan(filename, position)
-      if (this.configManager && this.logger) {
-        const defaultRemove = ['**/node_modules/@types/react/index.d.ts']
-        const whatToRemove = this.configManager.config.remove || defaultRemove
-        const forceRemove = this.configManager.config.forceRemove || []
-        if (prior && prior.definitions) {
-          let definitions = prior.definitions.filter(x => !forceRemove.find(item => minimatch(x.fileName, item)))
-          if (prior.definitions.length > 1) {
-            definitions = prior.definitions.filter(x => !whatToRemove.find(item => minimatch(x.fileName, item)))
-          }
-          return { ...prior, definitions }
-        }
+      if (!this.configManager || !this.logger || !prior || !prior.definitions) {
+        return prior
       }
-      return prior
+      const defaultRemove = ['**/node_modules/@types/react/index.d.ts']
+      const whatToRemove = this.configManager.config.remove || defaultRemove
+      const forceRemove = this.configManager.config.forceRemove || []
+      let definitions = this.filter(prior.definitions, forceRemove, filename)
+      if (definitions.length > 1) {
+        definitions = this.filter(definitions, whatToRemove, filename)
+      }
+      return { ...prior, definitions }
     }
     return proxy
+  }
+
+  private filter(definitions: readonly ts.DefinitionInfo[], rules: Rule[], sourceFileName: string) {
+    return definitions.filter(definition => !rules.find(rule => {
+      if (typeof rule === 'string') {
+        return minimatch(definition.fileName, rule)
+      }
+      if (minimatch(sourceFileName, rule.file)) {
+        return minimatch(definition.fileName, rule.definition)
+      }
+      return false
+    }))
   }
 
   public onConfigurationChanged(config: SynchronizedConfiguration) {
